@@ -209,6 +209,25 @@ ggsave(covg_plot2, filename = "figures/cv_ols_covg2.pdf", height = 2.5, width = 
 temp %>% group_by(n) %>% summarize(var(sqrt(n) * err_xy))
 
 
+temp4 <- temp %>% 
+  group_by(n) %>%
+  summarize(err = mean(err),
+            bias = mean(cv_est - err),
+            vari = var(cv_est - err))
+
+rates_plot_bv <- ggplot(temp4, aes(x = n)) +
+  geom_line(aes(y= bias^2, color = "bias^2")) +
+  geom_point(aes(y= bias^2, color = "bias^2", shape = "bias^2")) +
+  geom_line(aes(y= (vari), color = "variance")) +
+  geom_point(aes(y= (vari), color = "variance", shape = "variance")) +
+  scale_y_log10() + 
+  scale_x_log10() +
+  labs(y = "", shape = "", color = "") + 
+  theme_bw() +
+  theme(aspect.ratio = 1)
+rates_plot_bv
+ggsave(rates_plot_bv)
+
 
 ########################
 ##### Data splitting
